@@ -26,7 +26,7 @@ About 8,900 mod settings from 170 mods can be changed in AMP. They are grouped a
 into 10 Configuration sidebar entries (`Mods A`, `Mods B`, `Mods C-D` …), with one tab per mod.
 Left out on purpose: big data tables (IguanaTinkerTweaks block/material tables, RTG biome tables,
 TGregworks, SuperTiC effects, Blood Magic, Botania flower and InfernalMobs per-mob lists),
-client-only settings, block/item/biome IDs, and debug/internal switches. Those stay editable in the File Manager.
+client-only settings, block/item/biome/potion/enchantment/dimension IDs, and debug/internal switches. Those stay editable in the File Manager.
 
 How it works: AMP writes your choices to `amp-modconfigs.txt`, and before every start the
 pre-start stage runs `ModConfigApply.java` (with the instance's own Java), which updates only

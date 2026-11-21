@@ -45,6 +45,11 @@ IDS = re.compile(r'(^|[ _.])(id|ids)$|id$|dimension ?id|biome ?id|potion ?id|enc
 INTERNAL = re.compile(r'debug|logging|log |verbose|version|mixin|compat|integration|asm|coremod|transformer'
                       r'|patch|experimental|benchmark|profil|thread|cache|telemetry|update ?check|checkForUpdates'
                       r'|metrics|lang', re.I)
+# Number settings inside potion/enchantment/biome/dimension/entity sections are usually registry IDs.
+ID_SECTION = re.compile(r'potion|enchant|biome|dimension|dims?|entit|villager ?prof|achievement', re.I)
+NOT_ID = re.compile(r'chance|weight|rate|size|count|max|min|amount|level|radius|range|duration|time|delay|tick'
+                    r'|speed|cost|limit|multiplier|percent|spawn|frequen|height|depth|power|strength|enable'
+                    r'|temperature|rainfall|generat|incidence|distance', re.I)
 RANGE = re.compile(r'\[range:\s*(-?[\d.]+)\s*~\s*(-?[\d.]+)', re.I)
 VALID = re.compile(r'\[valid:\s*([^\]]+)\]', re.I)
 INT32 = (-2**31, 2**31 - 1)
@@ -100,7 +105,7 @@ def parse(path, rel):
         comment = []
 
 
-def keep(rel, cat, name):
+def keep(rel, cat, name, typ):
     if rel in SKIP_FILES or rel.startswith(SKIP_PREFIXES):
         return 'table'
     if mod_of(rel).lower() in SKIP_MODS:
@@ -112,6 +117,8 @@ def keep(rel, cat, name):
     if CLIENT.search(where) or CLIENT.search(name):
         return 'client'
     if IDS.search(name) or re.search(r'\bids?\b', cat, re.I):
+        return 'ids'
+    if typ == 'I' and ID_SECTION.search(cat) and not NOT_ID.search(name) and not NOT_ID.search(cat):
         return 'ids'
     if INTERNAL.search(name) or INTERNAL.search(cat):
         return 'internal'
@@ -164,7 +171,7 @@ def main(server):
                 path = os.path.join(dp, fn)
                 rel = os.path.relpath(path, server).replace('\\', '/')
                 for cat, typ, name, value, comment in parse(path, rel):
-                    why = keep(rel, cat, name)
+                    why = keep(rel, cat, name, typ)
                     if why:
                         skipped[why] += 1
                         continue
