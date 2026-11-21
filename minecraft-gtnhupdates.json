@@ -1,0 +1,62 @@
+[
+    {
+        "UpdateStageName": "Create Staging Directory",
+        "UpdateSourcePlatform": "All",
+        "UpdateSource": "CreateDirectory",
+        "UpdateSourceArgs": "{{$FullBaseDir}}gtnh-staging",
+        "SkipOnFailure": false
+    },
+    {
+        "UpdateStageName": "GTNH Server Pack Download",
+        "UpdateSourcePlatform": "All",
+        "UpdateSource": "FetchURL",
+        "UpdateSourceData": "{{PackUrl}}",
+        "UpdateSourceTarget": "{{$FullBaseDir}}gtnh-staging",
+        "UnzipUpdateSource": true,
+        "OverwriteExistingFiles": true,
+        "DeleteAfterExtract": true,
+        "SkipOnFailure": false
+    },
+    {
+        "UpdateStageName": "GTNH Server Pack Install",
+        "UpdateSourcePlatform": "Linux",
+        "UpdateSource": "Executable",
+        "UpdateSourceData": "/bin/bash",
+        "UpdateSourceArgs": "-c \"cd minecraft-gtnh || exit 1; S=gtnh-staging; if [ ! -f $S/lwjgl3ify-forgePatches.jar ]; then echo 'GTNH server pack not found after download. Check the Server Pack URL setting'; exit 1; fi; if [ '{{CleanInstall}}' = 'true' ]; then echo 'Removing old mods, libraries and config folders'; rm -rf mods libraries config; fi; for f in server.properties eula.txt ops.json whitelist.json banned-ips.json banned-players.json usercache.json; do if [ -e $f ]; then rm -f $S/$f; fi; done; for d in serverutilities journeymap; do if [ -d $d ]; then rm -rf $S/$d; fi; done; cp -a $S/. ./ || exit 1; rm -rf $S; echo 'GTNH server files installed'\"",
+        "SkipOnFailure": false
+    },
+    {
+        "UpdateStageName": "GTNH Server Pack Install",
+        "UpdateSourcePlatform": "Windows",
+        "UpdateSource": "Executable",
+        "UpdateSourceData": "powershell.exe",
+        "UpdateSourceArgs": "-NoProfile -Command \"$ProgressPreference='SilentlyContinue'; Set-Location -Path 'minecraft-gtnh'; $S='gtnh-staging'; if (-not (Test-Path (Join-Path $S 'lwjgl3ify-forgePatches.jar'))) { Write-Output 'GTNH server pack not found after download. Check the Server Pack URL setting'; exit 1 }; if ('{{CleanInstall}}' -eq 'true') { Write-Output 'Removing old mods, libraries and config folders'; Remove-Item -Path 'mods','libraries','config' -Recurse -Force -ErrorAction SilentlyContinue }; foreach ($f in 'server.properties','eula.txt','ops.json','whitelist.json','banned-ips.json','banned-players.json','usercache.json') { if (Test-Path $f) { Remove-Item (Join-Path $S $f) -Force -ErrorAction SilentlyContinue } }; foreach ($d in 'serverutilities','journeymap') { if (Test-Path $d) { Remove-Item (Join-Path $S $d) -Recurse -Force -ErrorAction SilentlyContinue } }; robocopy $S . /E /IS /IT /NFL /NDL /NJH /NJS /NP | Out-Null; if ($LASTEXITCODE -ge 8) { Write-Output 'Copying the pack files failed'; exit 1 }; Remove-Item $S -Recurse -Force -ErrorAction SilentlyContinue; Write-Output 'GTNH server files installed'; exit 0\"",
+        "SkipOnFailure": false
+    },
+    {
+        "UpdateStageName": "Java Download",
+        "UpdateSourcePlatform": "Linux",
+        "UpdateSourceArch": "x86_64",
+        "UpdateSource": "Executable",
+        "UpdateSourceData": "/bin/bash",
+        "UpdateSourceArgs": "-c \"cd minecraft-gtnh && if [[ -x java/bin/java ]]; then InstalledVersion=$(java/bin/java --version | grep \\\"Temurin-\\\" | head -n1 | sed -n \\\"s/.*Temurin-\\\\([^[:space:]]\\\\+\\\\).*/\\\\1/p\\\"); else InstalledVersion=\\\"\\\"; fi; LatestVersionBuild=$(wget -qO- \\\"https://api.adoptium.net/v3/assets/latest/{{JavaVersion}}/hotspot?architecture=x64&image_type=jdk&os=linux&vendor=eclipse\\\" | jq -r \\\".[0].version.openjdk_version\\\" | sed \\\"s/-LTS$//\\\"); if [[ \\\"$InstalledVersion\\\" == \\\"$LatestVersionBuild\\\" ]]; then echo \\\"Eclipse Temurin Java $LatestVersionBuild already installed. Skipping\\\" && exit 0; else [[ -f java.tar.gz ]] && rm -f java.tar.gz >/dev/null 2>&1; wget -qO java.tar.gz https://api.adoptium.net/v3/binary/latest/{{JavaVersion}}/ga/linux/x64/jdk/hotspot/normal/eclipse || { echo \\\"Download failed from the Eclipse Temurin CDN. This is a fault with the CDN, not AMP. Aborting\\\"; exit 1; }; mkdir -p java && rm -rf java/* >/dev/null 2>&1 && tar -xzf java.tar.gz -C java --strip-components=1 >/dev/null 2>&1 && rm -f java.tar.gz >/dev/null 2>&1 && chmod +x java/bin/java && echo \\\"Eclipse Temurin Java $LatestVersionBuild downloaded\\\"; fi\"",
+        "SkipOnFailure": false
+    },
+    {
+        "UpdateStageName": "Java Download",
+        "UpdateSourcePlatform": "Linux",
+        "UpdateSourceArch": "aarch64",
+        "UpdateSource": "Executable",
+        "UpdateSourceData": "/bin/bash",
+        "UpdateSourceArgs": "-c \"cd minecraft-gtnh && if [[ -x java/bin/java ]]; then InstalledVersion=$(java/bin/java --version | grep \\\"Temurin-\\\" | head -n1 | sed -n \\\"s/.*Temurin-\\\\([^[:space:]]\\\\+\\\\).*/\\\\1/p\\\"); else InstalledVersion=\\\"\\\"; fi; LatestVersionBuild=$(wget -qO- \\\"https://api.adoptium.net/v3/assets/latest/{{JavaVersion}}/hotspot?architecture=aarch64&image_type=jdk&os=linux&vendor=eclipse\\\" | jq -r \\\".[0].version.openjdk_version\\\" | sed \\\"s/-LTS$//\\\"); if [[ \\\"$InstalledVersion\\\" == \\\"$LatestVersionBuild\\\" ]]; then echo \\\"Eclipse Temurin Java $LatestVersionBuild already installed. Skipping\\\" && exit 0; else [[ -f java.tar.gz ]] && rm -f java.tar.gz >/dev/null 2>&1; wget -qO java.tar.gz https://api.adoptium.net/v3/binary/latest/{{JavaVersion}}/ga/linux/aarch64/jdk/hotspot/normal/eclipse || { echo \\\"Download failed from the Eclipse Temurin CDN. This is a fault with the CDN, not AMP. Aborting\\\"; exit 1; }; mkdir -p java && rm -rf java/* >/dev/null 2>&1 && tar -xzf java.tar.gz -C java --strip-components=1 >/dev/null 2>&1 && rm -f java.tar.gz >/dev/null 2>&1 && chmod +x java/bin/java && echo \\\"Eclipse Temurin Java $LatestVersionBuild downloaded\\\"; fi\"",
+        "SkipOnFailure": false
+    },
+    {
+        "UpdateStageName": "Java Download",
+        "UpdateSourcePlatform": "Windows",
+        "UpdateSource": "Executable",
+        "UpdateSourceData": "powershell.exe",
+        "UpdateSourceArgs": "-NoProfile -Command \"$ProgressPreference='SilentlyContinue'; [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Set-Location -Path 'minecraft-gtnh'; if (Test-Path 'java/bin/java.exe') { $InstalledVersion = (& java/bin/java.exe --version | Select-String -Pattern 'Temurin-(\\d+(?:\\.\\d+\\.\\d+(?:\\.\\d+)?)?\\+\\d+)' | Select-Object -First 1 | ForEach-Object { $_.Matches[0].Groups[1].Value }) } else { $InstalledVersion = '' }; $LatestVersionBuild = (Invoke-RestMethod -UseBasicParsing -Uri \\\"https://api.adoptium.net/v3/assets/latest/{{JavaVersion}}/hotspot?architecture=x64&image_type=jdk&os=windows&vendor=eclipse\\\")[0].version.openjdk_version -replace '-LTS$', ''; if ( $InstalledVersion -eq $LatestVersionBuild ) { Write-Output \\\"Eclipse Temurin Java $LatestVersionBuild already installed. Skipping\\\"; exit 0 } else { if ( Test-Path java.zip ) { Remove-Item java.zip -Force -ErrorAction SilentlyContinue *> $null }; try { Invoke-WebRequest -UseBasicParsing -Uri https://api.adoptium.net/v3/binary/latest/{{JavaVersion}}/ga/windows/x64/jdk/hotspot/normal/eclipse -OutFile java.zip -ErrorAction Stop } catch { Write-Output \\\"Download failed from the Eclipse Temurin CDN. This is a fault with the CDN, not AMP. Aborting\\\"; exit 1; }; Expand-Archive -Path \\\"java.zip\\\" -DestinationPath \\\".\\\" -Force *> $null; if ( Test-Path java.zip ) { Remove-Item java.zip -Force -ErrorAction SilentlyContinue *> $null }; if (Test-Path \\\"jdk-*\\\") { Remove-Item -Recurse -Force java -ErrorAction SilentlyContinue *> $null; Start-Sleep -Seconds 2; Get-ChildItem -Directory | Where-Object { $_.Name -like \\\"jdk-*\\\" } | Rename-Item -NewName \\\"java\\\" *> $null; Write-Output \\\"Eclipse Temurin Java $LatestVersionBuild downloaded\\\" } }\"",
+        "SkipOnFailure": false
+    }
+]
