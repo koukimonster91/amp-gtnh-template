@@ -1,0 +1,27 @@
+[
+    {
+        "UpdateStageName": "Mod Config Applier Download",
+        "UpdateSourcePlatform": "All",
+        "UpdateSource": "FetchURL",
+        "UpdateSourceData": "https://raw.githubusercontent.com/koukimonster91/amp-gtnh-template/main/ModConfigApply.java",
+        "UpdateSourceTarget": "{{$FullBaseDir}}",
+        "OverwriteExistingFiles": true,
+        "SkipOnFailure": true
+    },
+    {
+        "UpdateStageName": "Apply Mod Configs",
+        "UpdateSourcePlatform": "Linux",
+        "UpdateSource": "Executable",
+        "UpdateSourceData": "/bin/bash",
+        "UpdateSourceArgs": "-c \"cd minecraft-gtnh && if [ -x java/bin/java ] && [ -f ModConfigApply.java ]; then java/bin/java ModConfigApply.java .; else echo '[ModConfigs] Java or ModConfigApply.java missing, skipping'; fi\"",
+        "SkipOnFailure": true
+    },
+    {
+        "UpdateStageName": "Apply Mod Configs",
+        "UpdateSourcePlatform": "Windows",
+        "UpdateSource": "Executable",
+        "UpdateSourceData": "powershell.exe",
+        "UpdateSourceArgs": "-NoProfile -Command \"Set-Location 'minecraft-gtnh'; if ((Test-Path 'java/bin/java.exe') -and (Test-Path 'ModConfigApply.java')) { & 'java/bin/java.exe' ModConfigApply.java . } else { Write-Output '[ModConfigs] Java or ModConfigApply.java missing, skipping' }\"",
+        "SkipOnFailure": true
+    }
+]

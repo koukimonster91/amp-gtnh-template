@@ -1,0 +1,368 @@
+[
+    {
+        "DisplayName": "Accept Minecraft EULA",
+        "Category": "GT New Horizons:stadia_controller",
+        "Subcategory": "Server:dns:1",
+        "Description": "You must accept the Minecraft EULA (https://aka.ms/MinecraftEULA) or the server will not start",
+        "Keywords": "eula,accept,license",
+        "FieldName": "eula",
+        "InputType": "checkbox",
+        "ParamFieldName": "eula",
+        "DefaultValue": "false",
+        "EnumValues": {
+            "False": "false",
+            "True": "true"
+        }
+    },
+    {
+        "DisplayName": "Server Name (MOTD)",
+        "Category": "GT New Horizons:stadia_controller",
+        "Subcategory": "Server:dns:1",
+        "Description": "Message shown under the server name in the multiplayer server list",
+        "Keywords": "motd,server,name",
+        "FieldName": "motd",
+        "InputType": "text",
+        "ParamFieldName": "motd",
+        "DefaultValue": "GT:New Horizons",
+        "EnumValues": {}
+    },
+    {
+        "DisplayName": "Player Limit",
+        "Category": "GT New Horizons:stadia_controller",
+        "Subcategory": "Server:dns:1",
+        "Description": "Maximum number of players allowed on the server at one time",
+        "Keywords": "max,maximum,players,limit,max-players",
+        "FieldName": "$MaxUsers",
+        "InputType": "number",
+        "MinValue": "1",
+        "ParamFieldName": "max-players",
+        "DefaultValue": "20",
+        "Suffix": "players",
+        "EnumValues": {}
+    },
+    {
+        "DisplayName": "Enable Whitelist",
+        "Category": "GT New Horizons:stadia_controller",
+        "Subcategory": "Server:dns:1",
+        "Description": "If on, only players added with 'whitelist add <name>' can join. GTNH ships with this on",
+        "Keywords": "whitelist,white-list",
+        "FieldName": "white-list",
+        "InputType": "checkbox",
+        "ParamFieldName": "white-list",
+        "DefaultValue": "true",
+        "EnumValues": {
+            "False": "false",
+            "True": "true"
+        }
+    },
+    {
+        "DisplayName": "Online Mode",
+        "Category": "GT New Horizons:stadia_controller",
+        "Subcategory": "Server:dns:1",
+        "Description": "If on, players are verified against Mojang/Microsoft accounts. Leave on unless you know why you need it off",
+        "Keywords": "online,mode,auth,online-mode",
+        "FieldName": "online-mode",
+        "InputType": "checkbox",
+        "ParamFieldName": "online-mode",
+        "DefaultValue": "true",
+        "EnumValues": {
+            "False": "false",
+            "True": "true"
+        }
+    },
+    {
+        "DisplayName": "Allow Flight",
+        "Category": "GT New Horizons:stadia_controller",
+        "Subcategory": "Server:dns:1",
+        "Description": "Must stay on for jetpacks and other modded flight, or players get kicked for flying",
+        "Keywords": "flight,fly,allow-flight",
+        "FieldName": "allow-flight",
+        "InputType": "checkbox",
+        "ParamFieldName": "allow-flight",
+        "DefaultValue": "true",
+        "EnumValues": {
+            "False": "false",
+            "True": "true"
+        }
+    },
+    {
+        "DisplayName": "Op Permission Level",
+        "Category": "GT New Horizons:stadia_controller",
+        "Subcategory": "Server:dns:1",
+        "Description": "Permission level given to operators",
+        "Keywords": "op,permission,level,op-permission-level",
+        "FieldName": "op-permission-level",
+        "InputType": "enum",
+        "ParamFieldName": "op-permission-level",
+        "DefaultValue": "2",
+        "EnumValues": {
+            "1": "1 - Bypass spawn protection",
+            "2": "2 - Cheat commands (GTNH default)",
+            "3": "3 - Player management",
+            "4": "4 - All commands"
+        }
+    },
+    {
+        "DisplayName": "Idle Kick Timeout",
+        "Category": "GT New Horizons:stadia_controller",
+        "Subcategory": "Server:dns:1",
+        "Description": "Minutes before idle players are kicked. 0 = never",
+        "Keywords": "idle,afk,timeout,player-idle-timeout",
+        "FieldName": "player-idle-timeout",
+        "InputType": "number",
+        "MinValue": "0",
+        "ParamFieldName": "player-idle-timeout",
+        "DefaultValue": "0",
+        "Suffix": "minutes",
+        "EnumValues": {}
+    },
+    {
+        "DisplayName": "World Name",
+        "Category": "GT New Horizons:stadia_controller",
+        "Subcategory": "World:public:2",
+        "Description": "Folder name of the world to load, or create if it does not exist",
+        "Keywords": "level,world,name,level-name",
+        "FieldName": "level-name",
+        "InputType": "text",
+        "ParamFieldName": "level-name",
+        "DefaultValue": "World",
+        "EnumValues": {}
+    },
+    {
+        "DisplayName": "World Seed",
+        "Category": "GT New Horizons:stadia_controller",
+        "Subcategory": "World:public:2",
+        "Description": "Seed for a new world. Empty = random",
+        "Keywords": "level,seed,level-seed",
+        "FieldName": "level-seed",
+        "InputType": "text",
+        "ParamFieldName": "level-seed",
+        "DefaultValue": "",
+        "EnumValues": {}
+    },
+    {
+        "DisplayName": "World Type",
+        "Category": "GT New Horizons:stadia_controller",
+        "Subcategory": "World:public:2",
+        "Description": "World generator for a new world. GTNH is balanced around Realistic World Gen (rwg)",
+        "Keywords": "level,type,level-type,rwg",
+        "FieldName": "level-type",
+        "InputType": "enum",
+        "ParamFieldName": "level-type",
+        "DefaultValue": "rwg",
+        "EnumValues": {
+            "rwg": "Realistic World Gen (GTNH default)",
+            "DEFAULT": "Vanilla default",
+            "FLAT": "Flat",
+            "LARGEBIOMES": "Large biomes",
+            "AMPLIFIED": "Amplified"
+        }
+    },
+    {
+        "DisplayName": "Difficulty",
+        "Category": "GT New Horizons:stadia_controller",
+        "Subcategory": "World:public:2",
+        "Description": "World difficulty",
+        "Keywords": "difficulty",
+        "FieldName": "difficulty",
+        "InputType": "enum",
+        "ParamFieldName": "difficulty",
+        "DefaultValue": "3",
+        "EnumValues": {
+            "0": "Peaceful",
+            "1": "Easy",
+            "2": "Normal",
+            "3": "Hard (GTNH default)"
+        }
+    },
+    {
+        "DisplayName": "Game Mode",
+        "Category": "GT New Horizons:stadia_controller",
+        "Subcategory": "World:public:2",
+        "Description": "Game mode for new players",
+        "Keywords": "game,mode,gamemode",
+        "FieldName": "gamemode",
+        "InputType": "enum",
+        "ParamFieldName": "gamemode",
+        "DefaultValue": "0",
+        "EnumValues": {
+            "0": "Survival",
+            "1": "Creative",
+            "2": "Adventure"
+        }
+    },
+    {
+        "DisplayName": "Hardcore",
+        "Category": "GT New Horizons:stadia_controller",
+        "Subcategory": "World:public:2",
+        "Description": "Players are banned on death",
+        "Keywords": "hardcore",
+        "FieldName": "hardcore",
+        "InputType": "checkbox",
+        "ParamFieldName": "hardcore",
+        "DefaultValue": "false",
+        "EnumValues": {
+            "False": "false",
+            "True": "true"
+        }
+    },
+    {
+        "DisplayName": "PvP",
+        "Category": "GT New Horizons:stadia_controller",
+        "Subcategory": "World:public:2",
+        "Description": "Allow players to damage each other",
+        "Keywords": "pvp",
+        "FieldName": "pvp",
+        "InputType": "checkbox",
+        "ParamFieldName": "pvp",
+        "DefaultValue": "true",
+        "EnumValues": {
+            "False": "false",
+            "True": "true"
+        }
+    },
+    {
+        "DisplayName": "Allow Nether",
+        "Category": "GT New Horizons:stadia_controller",
+        "Subcategory": "World:public:2",
+        "Description": "Allow travel to the Nether",
+        "Keywords": "nether,allow-nether",
+        "FieldName": "allow-nether",
+        "InputType": "checkbox",
+        "ParamFieldName": "allow-nether",
+        "DefaultValue": "true",
+        "EnumValues": {
+            "False": "false",
+            "True": "true"
+        }
+    },
+    {
+        "DisplayName": "Enable Command Blocks",
+        "Category": "GT New Horizons:stadia_controller",
+        "Subcategory": "World:public:2",
+        "Description": "Allow command blocks to run",
+        "Keywords": "command,block,enable-command-block",
+        "FieldName": "enable-command-block",
+        "InputType": "checkbox",
+        "ParamFieldName": "enable-command-block",
+        "DefaultValue": "true",
+        "EnumValues": {
+            "False": "false",
+            "True": "true"
+        }
+    },
+    {
+        "DisplayName": "View Distance",
+        "Category": "GT New Horizons:stadia_controller",
+        "Subcategory": "World:public:2",
+        "Description": "Chunks sent to each player. Higher values cost a lot of RAM and CPU in GTNH",
+        "Keywords": "view,distance,chunks,view-distance",
+        "FieldName": "view-distance",
+        "InputType": "number",
+        "MinValue": "3",
+        "MaxValue": "15",
+        "ParamFieldName": "view-distance",
+        "DefaultValue": "8",
+        "Suffix": "chunks",
+        "EnumValues": {}
+    },
+    {
+        "DisplayName": "Spawn Protection Radius",
+        "Category": "GT New Horizons:stadia_controller",
+        "Subcategory": "World:public:2",
+        "Description": "Radius around spawn that only operators can build in. 0 = off",
+        "Keywords": "spawn,protection,spawn-protection",
+        "FieldName": "spawn-protection",
+        "InputType": "number",
+        "MinValue": "0",
+        "ParamFieldName": "spawn-protection",
+        "DefaultValue": "1",
+        "Suffix": "blocks",
+        "EnumValues": {}
+    },
+    {
+        "DisplayName": "Minimum Memory",
+        "Category": "GT New Horizons:stadia_controller",
+        "Subcategory": "Java:code:3",
+        "Description": "Java starting heap (-Xms). GTNH recommends setting this equal to Maximum Memory",
+        "Keywords": "memory,ram,xms,heap",
+        "FieldName": "MinMemory",
+        "InputType": "number",
+        "MinValue": "1024",
+        "ParamFieldName": "MinMemory",
+        "DefaultValue": "6144",
+        "Suffix": "MB",
+        "EnumValues": {}
+    },
+    {
+        "DisplayName": "Maximum Memory",
+        "Category": "GT New Horizons:stadia_controller",
+        "Subcategory": "Java:code:3",
+        "Description": "Java maximum heap (-Xmx). GTNH needs at least 6 GB; give more for many players or big bases",
+        "Keywords": "memory,ram,xmx,heap",
+        "FieldName": "MaxMemory",
+        "InputType": "number",
+        "MinValue": "4096",
+        "ParamFieldName": "MaxMemory",
+        "DefaultValue": "6144",
+        "Suffix": "MB",
+        "EnumValues": {}
+    },
+    {
+        "DisplayName": "Java Version",
+        "Category": "GT New Horizons:stadia_controller",
+        "Subcategory": "Java:code:3",
+        "Description": "Eclipse Temurin Java version downloaded into the instance. This GTNH build supports Java 17 to 26. Update the server after changing this",
+        "Keywords": "java,version,JavaVersion",
+        "FieldName": "JavaVersion",
+        "InputType": "enum",
+        "ParamFieldName": "JavaVersion",
+        "IncludeInCommandLine": false,
+        "DefaultValue": "21",
+        "EnumValues": {
+            "17": "17 - LTS",
+            "21": "21 - LTS (default)",
+            "25": "25 - LTS"
+        }
+    },
+    {
+        "DisplayName": "Extra Java Arguments",
+        "Category": "GT New Horizons:stadia_controller",
+        "Subcategory": "Java:code:3",
+        "Description": "Extra JVM arguments added before the GTNH java9args.txt file, e.g. a garbage collector choice. Leave empty if unsure",
+        "Keywords": "java,arguments,args,jvm,gc,CustomJavaArgs",
+        "FieldName": "CustomJavaArgs",
+        "InputType": "text",
+        "ParamFieldName": "CustomJavaArgs",
+        "DefaultValue": "",
+        "Placeholder": "-XX:+UseZGC -XX:+ZGenerational",
+        "EnumValues": {}
+    },
+    {
+        "DisplayName": "Server Pack URL",
+        "Category": "GT New Horizons:stadia_controller",
+        "Subcategory": "Pack:download:4",
+        "Description": "Direct link to the GTNH server pack zip (Java 17+ build) from https://downloads.gtnewhorizons.com/ServerPacks/. To move to a new GTNH version: stop the server, back it up, change this link, then click Update",
+        "Keywords": "pack,url,version,download,PackUrl",
+        "FieldName": "PackUrl",
+        "InputType": "text",
+        "ParamFieldName": "PackUrl",
+        "DefaultValue": "https://downloads.gtnewhorizons.com/ServerPacks/GT_New_Horizons_2.9.0_Server_Java_17-26.zip",
+        "EnumValues": {}
+    },
+    {
+        "DisplayName": "Clean Install on Update",
+        "Category": "GT New Horizons:stadia_controller",
+        "Subcategory": "Pack:download:4",
+        "Description": "If on, the mods, libraries and config folders are deleted before the pack is unpacked, which is what GTNH asks for when changing versions (stale jars crash the server). Your world, server.properties, ops, whitelist, bans and serverutilities/journeymap data are always kept. Turn off only if you hand-edited files in config/ and will merge them yourself",
+        "Keywords": "clean,update,install,CleanInstall",
+        "FieldName": "CleanInstall",
+        "InputType": "checkbox",
+        "ParamFieldName": "CleanInstall",
+        "DefaultValue": "true",
+        "EnumValues": {
+            "False": "false",
+            "True": "true"
+        }
+    }
+]
