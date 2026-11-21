@@ -42,7 +42,8 @@ public class ModConfigApply {
                     if (v.equalsIgnoreCase("true") || v.equalsIgnoreCase("false")) return v.toLowerCase();
                     return null;
                 case "I":
-                    Long.parseLong(v);
+                    // some mods (e.g. HungerOverhaul) store whole numbers as "4.0"
+                    Double.parseDouble(v);
                     return v;
                 case "D":
                     Double.parseDouble(v);
@@ -73,10 +74,17 @@ public class ModConfigApply {
                   .put(unescape(parts[1]) + "|" + unescape(parts[2]), line.substring(eq + 1));
         }
 
-        int changed = 0, filesChanged = 0, bad = 0;
+        int changed = 0, filesChanged = 0, bad = 0, created = 0;
         for (Map.Entry<String, Map<String, String>> entry : byFile.entrySet()) {
             Path file = base.resolve(entry.getKey()).normalize();
-            if (!file.startsWith(base) || !Files.isRegularFile(file)) continue;
+            if (!file.startsWith(base)) continue;
+            if (!Files.exists(file)) {
+                // Some mods only create their config on first start (e.g. after a clean pack install).
+                // Write just the AMP values; Forge adds every other setting with its default when the mod loads.
+                created += createFile(file, entry.getValue());
+                continue;
+            }
+            if (!Files.isRegularFile(file)) continue;
 
             // ISO-8859-1 keeps every byte of the original file intact.
             String text = new String(Files.readAllBytes(file), StandardCharsets.ISO_8859_1);
@@ -117,6 +125,38 @@ public class ModConfigApply {
             }
         }
         System.out.println("[ModConfigs] " + changed + " setting(s) changed in " + filesChanged + " file(s)"
+                + (created > 0 ? ", " + created + " missing file(s) created" : "")
                 + (bad > 0 ? ", " + bad + " invalid value(s) ignored" : ""));
+    }
+
+    static String quote(String name) {
+        return name.matches("[A-Za-z0-9_.\\-]+") ? name : "\"" + name + "\"";
+    }
+
+    /** Writes a minimal Forge config holding only the given settings, nested by category. */
+    static int createFile(Path file, Map<String, String> settings) throws Exception {
+        // category path -> lines "T:name=value"
+        Map<String, java.util.List<String>> cats = new TreeMap<>();
+        for (Map.Entry<String, String> s : settings.entrySet()) {
+            int bar = s.getKey().indexOf('|');
+            String cat = s.getKey().substring(0, bar), setting = s.getKey().substring(bar + 1);
+            String type = setting.substring(0, 1), name = setting.substring(2);
+            String v = normalize(type, s.getValue());
+            if (v == null) continue;
+            cats.computeIfAbsent(cat, k -> new java.util.ArrayList<>()).add(type + ":" + quote(name) + "=" + v);
+        }
+        if (cats.isEmpty()) return 0;
+        StringBuilder out = new StringBuilder("# Configuration file\n# Created by ModConfigApply from AMP settings; the mod adds its other settings on load.\n\n");
+        for (Map.Entry<String, java.util.List<String>> c : cats.entrySet()) {
+            String[] path = c.getKey().isEmpty() ? new String[0] : c.getKey().split("\\.");
+            for (int d = 0; d < path.length; d++) out.append("    ".repeat(d)).append(quote(path[d])).append(" {\n");
+            for (String l : c.getValue()) out.append("    ".repeat(path.length)).append(l).append("\n");
+            for (int d = path.length - 1; d >= 0; d--) out.append("    ".repeat(d)).append("}\n");
+            out.append("\n");
+        }
+        Files.createDirectories(file.getParent());
+        Files.write(file, out.toString().getBytes(StandardCharsets.UTF_8));
+        System.out.println("[ModConfigs] created " + file.getFileName() + " with " + settings.size() + " AMP value(s)");
+        return 1;
     }
 }
