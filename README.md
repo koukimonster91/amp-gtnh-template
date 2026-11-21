@@ -22,7 +22,7 @@ Settings in AMP: EULA, MOTD, player limit, whitelist, online mode, flight, world
 
 ## Mod configs in AMP
 
-About 8,900 mod settings from 170 mods can be changed in AMP. They are grouped alphabetically
+About 8,750 mod settings from 170 mods can be changed in AMP. They are grouped alphabetically
 into 10 Configuration sidebar entries (`Mods A`, `Mods B`, `Mods C-D` …), with one tab per mod.
 Left out on purpose: big data tables (IguanaTinkerTweaks block/material tables, RTG biome tables,
 TGregworks, SuperTiC effects, Blood Magic, Botania flower and InfernalMobs per-mob lists),
