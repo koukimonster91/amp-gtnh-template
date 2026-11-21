@@ -364,5 +364,17 @@
             "False": "false",
             "True": "true"
         }
+    },
+    {
+        "DisplayName": "Import From Instance",
+        "Category": "GT New Horizons:stadia_controller",
+        "Subcategory": "Pack:download:4",
+        "Description": "For moving to a new GTNH version in a fresh instance: the folder name of the old instance (as shown in ADS, e.g. MinecraftGTNewHorizons01). On the next Update, if this instance has no world yet, the world, player lists, ServerUtilities homes/claims/ranks, JourneyMap and VisualProspecting data and extra-mods/ are copied from it. The old instance is only read, never changed; stop it first. AMP settings are not carried over. Leave empty otherwise",
+        "Keywords": "import,migrate,move,copy,old,instance,ImportFromInstance",
+        "FieldName": "ImportFromInstance",
+        "InputType": "text",
+        "ParamFieldName": "ImportFromInstance",
+        "DefaultValue": "",
+        "EnumValues": {}
     }
 ]

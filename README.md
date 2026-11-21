@@ -12,6 +12,8 @@ GT New Horizons server pack (Java 17+ build, default 2.9.0).
    `server.properties`, `eula.txt`, `ops.json`, `whitelist.json`, `banned-*.json`,
    `usercache.json`, `serverutilities/`, `journeymap/`. The world folder is never touched.
 4. Downloads Eclipse Temurin Java (17 / 21 / 25, default 21) into the instance.
+5. Runs `GtnhImport.java`: does the *Import From Instance* copy (see below) if one is set, then copies every
+   `.jar` in `extra-mods/` into `mods/`.
 
 **Start**: `java -Xms… -Xmx… -Dfml.readTimeout=180 -Duser.language=en @java9args.txt -jar lwjgl3ify-forgePatches.jar nogui`
 (same as GTNH's `startserver-java9` script, without its auto-restart loop; use AMP's own crash restart instead).
@@ -37,8 +39,27 @@ are reapplied on every start, they also survive a clean pack update.
 To refresh the settings for a new GTNH version, run the generator against that version's server files:
 `python tools/gen_modconfigs.py <server folder>`. The report goes to `tools/modconfigs-report.txt`.
 
+## Extra mods
+Mods that are not part of the GTNH pack (for example Distant Horizons) go in `extra-mods/` as well as `mods/`.
+Every Update copies them back into `mods/`, so a clean pack install does not lose them. To remove one,
+delete it from both folders. If a later GTNH version ships the same mod itself, delete your copy from `extra-mods/`.
+
 ## Upgrading GTNH
-Stop the server, take an AMP backup, paste the new pack link into *Server Pack URL*, click Update.
+**In a new instance (recommended):**
+1. Create a new instance from this template. Before the first Update, set *Server Pack URL* to the new
+   version and *Import From Instance* to the old instance's folder name as ADS shows it (e.g. `MinecraftGTNewHorizons01`).
+2. Stop the old instance, then click Update in the new one.
+3. The world, player lists (ops, whitelist, bans, user cache), `serverutilities/` (homes, claims, ranks),
+   `journeymap/`, `config/JourneyMapServer/` (keeps the JourneyMap world ID), `visualprospecting/`,
+   `blueprints/` and `extra-mods/` are copied over. The old instance is only read, never changed.
+   ServerUtilities' own `backups/` folder is not copied.
+4. The import only runs once, and never if the new instance already has a world.
+5. AMP settings, including the mod settings, are not copied. The old instance's values are saved in
+   `imported-amp-modconfigs.txt` so you can compare and set them again.
+
+The import needs both instances on the same machine without Docker (a container cannot see other instances).
+
+**In place:** stop the server, take an AMP backup, paste the new pack link into *Server Pack URL*, click Update.
 
 ## Installing into AMP
 Either add this repo under **Configuration → Instance Deployment → Configuration Repositories**
